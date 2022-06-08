@@ -30,8 +30,8 @@ This part of scripts will allign data from different channels assuming the time 
 **All existing data have been preprocessed, so I leave rewriting this part for now and am going to rewrite the onset detection part first.**
 
 
-# License
-These scripts are naive. Please feel free to use them if you want, but I'm not responsible for any correction, updates of these scripts since no one pays me for that.
+# Others
+These scripts are naive. Please feel free to use them if you want, but I will not be responsible for any correction, updates of these scripts since no one pays me for that.
 I will appreciate it if anyone could point out any helpfult updates.
 I will implement them only if I will.
 Thanks!
