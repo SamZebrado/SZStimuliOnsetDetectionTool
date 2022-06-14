@@ -7,10 +7,14 @@ else
     fig_handle = varargin{1};
 end
 get_para_val = @(para)cellfun(@(p)p{1},para,'UniformOutput',false);
-parse_cell = @(c)c{:};
+fc_parse_cell = @(c)c{:};
 
 [i_trial,i_chan,min_Length,...
-    high_threshold,min_duration,min_n_sample,peak_direction,iSolution,wtc_frequency,wtc_sigma_thres,qPlot] = parse_cell(get_para_val(para));
+    high_threshold,...
+    min_duration,min_n_sample,...
+    peak_direction,iSolution,...
+    wtc_frequency,wtc_sigma_thres,...
+    qPlot] = fc_parse_cell(get_para_val(para));
 figure(fig_handle);
 subplot(1,2,1);
 

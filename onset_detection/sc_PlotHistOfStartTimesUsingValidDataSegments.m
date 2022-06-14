@@ -1,6 +1,6 @@
 %% parse the parameters
 get_para_val = @(para)cellfun(@(p)p{1},para,'UniformOutput',false);
-parse_cell = @(c)c{:};
+fc_parse_cell = @(c)c{:};
 high_threshold = nan(2,1);
 min_duration = nan(2,1);
 min_n_sample = nan(2,1);
@@ -8,6 +8,8 @@ peak_direction = nan(2,1);
 iSolution = nan(2,1);
 wtc_frequency = nan(2,1);
 wtc_sigma_thres = nan(2,1);
+min_onset_N_sample = nan(2,1);
+max_onset_N_sample = nan(2,1);
 for ii_chan = 1:2
     [~,~,min_Length,...
         high_threshold(ii_chan),...
@@ -15,9 +17,12 @@ for ii_chan = 1:2
         peak_direction(ii_chan),...
         iSolution(ii_chan),...
         wtc_frequency(ii_chan),...
-        wtc_sigma_thres(ii_chan),~,...
-        nStartTrial,nEndTrial,min_onset_N_sample(ii_chan),...
-        qPreview] = parse_cell(get_para_val(paraset{ii_chan}));
+        wtc_sigma_thres(ii_chan),...
+        ~,...
+        nStartTrial,nEndTrial,...
+        min_onset_N_sample(ii_chan),max_onset_N_sample(ii_chan),...
+        min_diff_allowed,max_diff_allowed,...
+        qPreview] = fc_parse_cell(get_para_val(paraset{ii_chan}));
 end
 valid_data_segments = collection_loaded_data.(dataset_info.processed_var);
 valid_data_segments = valid_data_segments(nStartTrial:nEndTrial,:,:);
@@ -81,7 +86,7 @@ st{ii_chan} = cellfun(@(signal,t)t(...
                 valid_data_segments(:,:,ii_chan),...
                 valid_data_time(:,:),'UniformOutput',false);
 
-st{ii_chan}(cellfun(@(st,t)isempty(st)||st<t(min_onset_N_sample(ii_chan)),st{ii_chan},valid_data_time)) = {nan};% to tackle with false positives
+st{ii_chan}(cellfun(@(st,t)isempty(st)||st<t(min_onset_N_sample(ii_chan)||st>t(max_onset_N_sample(ii_chan))),st{ii_chan},valid_data_time)) = {nan};% to tackle with false positives
 end        
 
 %%
@@ -102,7 +107,16 @@ fs = 2500; % sampling rate
 ind_ = ~isnan(st{1})&(~isnan(st{2}));
 st{1} = st{1}(ind_);
 st{2} = st{2}(ind_);
-fprintf('Number of trials selected: %i \n',sum(ind_))
+fprintf('Number of trials with good onsets on both channels: %i \n',sum(ind_))
+
+time_diff = st{1}(:)-st{2}(:);
+ind_to_remove = time_diff<min_diff_allowed|time_diff>max_diff_allowed;
+fprintf('\n%i trials further removed because the rediculous time difference outside of range [%.4f, %.4f] second',sum(ind_to_remove),min_diff_allowed,max_diff_allowed);
+
+st{1} = st{1}(~ind_to_remove);
+st{2} = st{2}(~ind_to_remove);
+fprintf('Number of trials remained: %i \n',sum(~ind_to_remove));
+
 %% Histograms
 figure(999);
 % raw data

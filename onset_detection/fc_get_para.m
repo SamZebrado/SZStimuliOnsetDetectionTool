@@ -1,6 +1,6 @@
 function para = fc_get_para(varargin)
 if isempty(varargin)
-    fname = 'InitParaList.xlsx';
+    fname = 'init_para.xlsx';
 else
     fname = varargin{1};
 end

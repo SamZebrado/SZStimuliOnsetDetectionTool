@@ -1,4 +1,4 @@
-function cur_info = sc_show_and_choose_a_dataset()
+function cur_info = fc_show_and_choose_a_dataset()
 % Load file list
 addpath ../
 sc_gen_file_list;

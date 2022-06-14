@@ -1,7 +1,7 @@
 % 
 
 %% Load file list
-dataset_info = sc_show_and_choose_a_dataset;
+dataset_info = fc_show_and_choose_a_dataset();
 
 %% Load processed data
 addpath ../processed_data/
