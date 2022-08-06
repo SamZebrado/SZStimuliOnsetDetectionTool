@@ -2,10 +2,10 @@ function fc_plot_data_and_cwt(d,varargin)
 switch length(varargin)
     case 0
     figure;
-    axes = arrayfun(@(s)subplot(3,1,s),[1,2,3])
+    axes = arrayfun(@(s)subplot(3,1,s),[1,2,3]);
     case 1
     figure(varargin{1});
-    axes = arrayfun(@(s)subplot(3,1,s),[1,2,3])
+    axes = arrayfun(@(s)subplot(3,1,s),[1,2,3]);
     case 2
     figure(varargin{1});
     axes = varargin{2};
